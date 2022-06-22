@@ -123,22 +123,60 @@ const produtos = [
 ];
 
 const listaDeCompras = [];
-let quantidade = 2;
-
-
+let quantidade = "";
+let idDoProduto = "";
+let total = [];
 
 function acharItem(produtos, idDoProduto) {
     return produtos.find((element) => element.id === idDoProduto);
-
-}
-function criarSubtotal(quantidade, preco) {
-    return quantidade * preco;
 }
 
 function addProdutoALista(produtos, quantidade, idDoProduto) {
     const item = acharItem(produtos, idDoProduto);
     const subtotal = criarSubtotal(quantidade, item.preco);
     listaDeCompras.push({ item, subtotal, quantidade });
+    total.push(subtotal)
     return listaDeCompras
+    return total
 }
-console.log(addProdutoALista(produtos, 6, 13));
+function criarSubtotal(quantidade, preco) {
+    return quantidade * preco;
+}
+
+function somartotal(total) {
+    let valor = Math.round(total.reduce(function (valor, total) {
+        return total + valor;
+    }, 0));
+    let valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    console.log(valorFormatado);
+}
+
+do {
+    idDoProduto = parseInt(prompt("insira o id"));
+    console.log(idDoProduto)
+
+    if (idDoProduto <= produtos.length && idDoProduto != 0) {
+        let quantidade = parseInt(prompt("Insira a quantidade"));
+        console.log(quantidade);
+        if (quantidade != 0) {
+            addProdutoALista(produtos, quantidade, idDoProduto)
+            console.log(listaDeCompras);
+        } else {
+            alert("Quantidade inválida");
+        }
+    } else if (idDoProduto === 0) {
+        break;
+
+    } else {
+        alert("Produto não cadastrado");
+    }
+} while (idDoProduto != 0);
+if (idDoProduto === 0) {
+    console.log(listaDeCompras)
+    console.log(total)
+    somartotal(total)
+}
+/*Tem que arrancar esse tanto de console.log
+exibir a lista de itens, quantidade e o valorFormatado numa só lista num alert
+refazer as perguntas do prompt*/
+
