@@ -122,6 +122,8 @@ const produtos = [
 
 ];
 
+const mercadorias = produtos.map(mercadoria => `${mercadoria.id}-${mercadoria.nome}-${mercadoria.preco}\r`);
+
 const listaDeCompras = [];
 let quantidade = "";
 let idDoProduto = "";
@@ -143,24 +145,23 @@ function criarSubtotal(quantidade, preco) {
     return quantidade * preco;
 }
 
-function somartotal(total) {
-    let valor = Math.round(total.reduce(function (valor, total) {
-        return total + valor;
+function somartotal(listaDeCompras) {
+    let valor = Math.round(listaDeCompras.reduce((valor, item) => {
+        return item.subtotal + valor;
     }, 0));
     let valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    console.log(valorFormatado);
+    return valorFormatado;
 }
 
+
 do {
-    idDoProduto = parseInt(prompt("insira o id"));
-    console.log(idDoProduto)
+    idDoProduto = parseInt(prompt(`Selecione o item pelo Id\r Digite 0 pra finalizar sua compra ou caso queira cancelar\r ${mercadorias}` ));
 
     if (idDoProduto <= produtos.length && idDoProduto != 0) {
         let quantidade = parseInt(prompt("Insira a quantidade"));
-        console.log(quantidade);
         if (quantidade != 0) {
-            addProdutoALista(produtos, quantidade, idDoProduto)
-            console.log(listaDeCompras);
+            addProdutoALista(produtos, quantidade, idDoProduto);
+            
         } else {
             alert("Quantidade inválida");
         }
@@ -172,11 +173,14 @@ do {
     }
 } while (idDoProduto != 0);
 if (idDoProduto === 0) {
-    console.log(listaDeCompras)
-    console.log(total)
-    somartotal(total)
+    
+    
+  
+ const retornarValor = somartotal(listaDeCompras);
+  const pedido = {
+    itens: listaDeCompras,
+    total: retornarValor
+    
+  }
+  console.log(JSON.stringify(pedido,null, 2));
 }
-/*Tem que arrancar esse tanto de console.log
-exibir a lista de itens, quantidade e o valorFormatado numa só lista num alert
-refazer as perguntas do prompt*/
-
